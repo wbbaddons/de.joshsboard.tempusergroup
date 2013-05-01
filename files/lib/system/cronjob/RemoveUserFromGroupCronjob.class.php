@@ -4,6 +4,14 @@ use wcf\data\cronjob\Cronjob;
 use wcf\system\WCF;
 use wcf\data\user\UserEditor;
 
+/**
+ * Removes users from temporary groups. 
+ * 
+ * @author      Joshua Rüsweg
+ * @package	de.joshsboard.tempusergroup
+ * @subpackage	system.cronjob
+ * @category	Community Framework
+ */
 class RemoveUserFromGoupCronjob extends AbstractCronjob {
 	/**
 	 * @see	wcf\system\cronjob\ICronjob::execute()
