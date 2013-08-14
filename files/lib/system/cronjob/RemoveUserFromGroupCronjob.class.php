@@ -13,7 +13,7 @@ use wcf\system\WCF;
  * @subpackage	system.cronjob
  * @category	Community Framework
  */
-class RemoveUserFromGoupCronjob extends AbstractCronjob {
+class RemoveUserFromGroupCronjob extends AbstractCronjob {
 	/**
 	 * @see	wcf\system\cronjob\ICronjob::execute()
 	 */
