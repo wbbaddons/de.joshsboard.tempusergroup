@@ -3,7 +3,8 @@
 	<import>
 		<cronjob>
 			<classname>wcf\system\cronjob\RemoveUserFromGroupCronjob</classname>
-			<description>remove users from temporary groups</description>
+			<description><![CDATA[Removes users from temporary groups]]></description>
+			<description language="de"><![CDATA[Entfernt Benutzer aus temporären Gruppen]]></description>
 			<startminute>*/5</startminute>
 			<starthour>*</starthour>
 			<startdom>*</startdom>

@@ -1,13 +1,14 @@
 <?php
 namespace wcf\system\cronjob;
 use wcf\data\cronjob\Cronjob;
-use wcf\system\WCF;
+use wcf\data\user\User;
 use wcf\data\user\UserEditor;
+use wcf\system\WCF;
 
 /**
  * Removes users from temporary groups. 
  * 
- * @author      Joshua Rüsweg
+ * @author      Joshua Ruesweg
  * @package	de.joshsboard.tempusergroup
  * @subpackage	system.cronjob
  * @category	Community Framework
@@ -19,22 +20,36 @@ class RemoveUserFromGoupCronjob extends AbstractCronjob {
 	public function execute(Cronjob $cronjob) {
 		parent::execute($cronjob);
 		
+		// fetch data
+		$users = array();
 		$sql = "SELECT	userID, groupID
 			FROM	wcf".WCF_N."_user_to_group_temp
-			WHERE until < ".TIME_NOW;
+			WHERE	until < ?";
 		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute();
-
+		$statement->execute(array(TIME_NOW));
+		
 		while ($row = $statement->fetchArray()) {
-			$user = new UserEditor($row['userID']);
-			$user->removeFromGroups(array($row['groupID']));
-			$user->resetCache();
-                        
-                        $sql = "DELETE FROM wcf".WCF_N."_user_to_group_temp
-                            WHERE 
-                            userID = ? AND groupID = ?";
-                        $statement = WCF::getDB()->prepareStatement($sql);
-                        $statement->execute(array($row['userID'], $row['groupID']));
+			if (!isset($users[$row['userID']])) {
+				$users[$row['userID']] = array();
+			}
+			
+			$users[$row['userID']][] = $row['groupID'];
 		}
+		
+		// remove users from groups
+		$userObjects = User::getUsers(array_keys($users));
+		foreach ($users as $userID => $groupIDs) {
+			$user = $userObjects[$userID];
+			$editor = new UserEditor($user);
+			$editor->removeFromGroups($groupIDs);
+		}
+		
+		$sql = "DELETE FROM	wcf".WCF_N."_user_to_group_temp
+			WHERE		until < ?";
+		$statement = WCF::getDB()->prepareStatement($sql);
+		$statement->execute(array(TIME_NOW));
+		
+		// reset cache
+		UserEditor::resetCache();
 	}
 }
