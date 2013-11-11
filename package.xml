@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package name="de.joshsboard.tempusergroup" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/package.xsd">
 	<packageinformation>
-		<packagename>Temporäre Usergruppe</packagename>
-		<packagedescription>Dieses Plugin ermöglicht es Nutzer temporär in Gruppen hinzuzufügen.</packagedescription>
+		<packagename>Temporary usergroup</packagename>
+		<packagedescription>This plugin allows users temporarily add to groups.</packagedescription>
 		<version>1.0.0 Beta 1</version>
 		<date>2013-05-01</date>
-		<isunique>1</isunique>
-		<plugin>com.woltlab.wcf</plugin>
 	</packageinformation>
 
 	<authorinformation>
