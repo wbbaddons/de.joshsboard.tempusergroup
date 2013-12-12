@@ -36,6 +36,8 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 			$users[$row['userID']][] = $row['groupID'];
 		}
 		
+		if (count($users) == 0) return; 
+		
 		// remove users from groups
 		$userObjects = User::getUsers(array_keys($users));
 		foreach ($users as $userID => $groupIDs) {
