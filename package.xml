@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package name="de.joshsboard.tempusergroup" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/package.xsd">
 	<packageinformation>
-		<packagename>Temporary usergroup</packagename>
-		<packagedescription>This plugin allows users temporarily add to groups.</packagedescription>
-		<version>1.0.0 Beta 1</version>
-		<date>2013-05-01</date>
+		<packagename><![CDATA[Temporary usergroup]]></packagename>
+		<packagename language="de"><![CDATA[Temporäre Benutzergruppen]]></packagename>
+		<packagedescription><![CDATA[This plugin allows users temporarily add to groups.]]></packagedescription>
+		<packagedescription language="de"><![CDATA[Dieses Plugin stellt die Möglichkeit bereit Nutzer in temporäre Benutzergruppen zu stecken.]]></packagedescription>
+		<version>1.0.0</version>
+		<date>2013-12-15</date>
+		<license><![CDATA[Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/legalcode>]]></license>
 	</packageinformation>
 
 	<authorinformation>
-		<author>Joshua Ruesweg</author>
-		<authorurl>http://www.joshsboard.de/</authorurl>
+		<author><![CDATA[Joshua Rüsweg]]></author>
+		<authorurl><![CDATA[http://www.joshsboard.de/]]></authorurl>
 	</authorinformation>
 
 	<requiredpackages>
-		<requiredpackage minversion="2.0.0 Alpha 1">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="2.0.0 RC3">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 
 	<instructions type="install">
@@ -22,8 +25,7 @@
 	    <instruction type="cronjob">cronjob.xml</instruction>
 	</instructions>
 
-	<instructions type="update" fromversion="*">
+	<instructions type="update" fromversion="1.0.0 Beta 1">
 	    <instruction type="file">files.tar</instruction>
-	    <instruction type="cronjob">cronjob.xml</instruction>
 	</instructions>
 </package>
