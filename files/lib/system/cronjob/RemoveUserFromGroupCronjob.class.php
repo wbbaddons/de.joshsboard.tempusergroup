@@ -3,6 +3,7 @@ namespace wcf\system\cronjob;
 use wcf\data\cronjob\Cronjob;
 use wcf\data\user\User;
 use wcf\data\user\UserEditor;
+use wcf\data\user\UserProfileAction;
 use wcf\system\event\EventHandler;
 use wcf\system\WCF;
 
@@ -18,9 +19,15 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 	
 	/**
 	 * all user which are updated
-	 * @var array<integer> 
+	 * @var array<User> 
 	 **/
 	public $user = array(); 
+	
+	/**
+	 * all user which are updated
+	 * @var array<mixed> 
+	 **/
+	public $userToGroups = array(); 
 	
 	/**
 	 * @see	wcf\system\cronjob\ICronjob::execute()
@@ -36,17 +43,17 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 		$statement->execute(array(TIME_NOW));
 		
 		while ($row = $statement->fetchArray()) {
-			if (!isset($this->user[$row['userID']])) {
-				$this->user[$row['userID']] = array();
+			if (!isset($this->userToGroups[$row['userID']])) {
+				$this->userToGroups[$row['userID']] = array();
 			}
 			
-			$this->user[$row['userID']][] = $row['groupID'];
+			$this->userToGroups[$row['userID']][] = $row['groupID'];
 		}
 		
-		if (count($this->user) != 0) {
+		if (count($this->userToGroups) != 0) {
 			// remove users from groups
 			$userObjects = User::getUsers(array_keys($this->user));
-			foreach ($this->user as $userID => $groupIDs) {
+			foreach ($this->userToGroups as $userID => $groupIDs) {
 				$user = $userObjects[$userID];
 				$editor = new UserEditor($user);
 				$editor->removeFromGroups($groupIDs);
@@ -59,6 +66,26 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 			
 			// reset cache
 			UserEditor::resetCache();
+			
+			// reread the user
+			$this->user = User::getUsers(array_keys($this->userToGroups));
+			
+			$editor = array(); 
+			
+			foreach ($users as $user) {
+				$editor[] = new UserEditor($user); 
+			}
+			
+			// update user ranks
+			if (MODULE_USER_RANK) {
+			        $action = new UserProfileAction($editor, 'updateUserRank');
+			        $action->executeAction();
+			}
+			
+			if (MODULE_USERS_ONLINE) {
+			        $action = new UserProfileAction($editor, 'updateUserOnlineMarking');
+			        $action->executeAction();
+			} 
 		}
 		
 		EventHandler::getInstance()->fireAction($this, 'executed');
