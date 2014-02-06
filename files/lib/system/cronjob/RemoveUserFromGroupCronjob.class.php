@@ -3,6 +3,7 @@ namespace wcf\system\cronjob;
 use wcf\data\cronjob\Cronjob;
 use wcf\data\user\User;
 use wcf\data\user\UserEditor;
+use wcf\system\event\EventHandler;
 use wcf\system\WCF;
 
 /**
@@ -53,5 +54,7 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 		
 		// reset cache
 		UserEditor::resetCache();
+		
+		EventHandler::getInstance()->fireAction($this, 'executed');
 	}
 }
