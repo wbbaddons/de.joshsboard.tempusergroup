@@ -15,6 +15,13 @@ use wcf\system\WCF;
  * @category	Community Framework
  */
 class RemoveUserFromGroupCronjob extends AbstractCronjob {
+	
+	/**
+	 * all user which are updated
+	 * @var array<integer> 
+	 **/
+	public $user = array(); 
+	
 	/**
 	 * @see	wcf\system\cronjob\ICronjob::execute()
 	 */
@@ -22,7 +29,6 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 		parent::execute($cronjob);
 		
 		// fetch data
-		$users = array();
 		$sql = "SELECT	userID, groupID
 			FROM	wcf".WCF_N."_user_to_group_temp
 			WHERE	until < ?";
@@ -30,30 +36,30 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 		$statement->execute(array(TIME_NOW));
 		
 		while ($row = $statement->fetchArray()) {
-			if (!isset($users[$row['userID']])) {
-				$users[$row['userID']] = array();
+			if (!isset($this->user[$row['userID']])) {
+				$this->user[$row['userID']] = array();
 			}
 			
-			$users[$row['userID']][] = $row['groupID'];
+			$this->user[$row['userID']][] = $row['groupID'];
 		}
 		
-		if (count($users) == 0) return; 
-		
-		// remove users from groups
-		$userObjects = User::getUsers(array_keys($users));
-		foreach ($users as $userID => $groupIDs) {
-			$user = $userObjects[$userID];
-			$editor = new UserEditor($user);
-			$editor->removeFromGroups($groupIDs);
+		if (count($this->user) != 0) {
+			// remove users from groups
+			$userObjects = User::getUsers(array_keys($this->user));
+			foreach ($this->user as $userID => $groupIDs) {
+				$user = $userObjects[$userID];
+				$editor = new UserEditor($user);
+				$editor->removeFromGroups($groupIDs);
+			}
+			
+			$sql = "DELETE FROM	wcf".WCF_N."_user_to_group_temp
+				WHERE		until < ?";
+			$statement = WCF::getDB()->prepareStatement($sql);
+			$statement->execute(array(TIME_NOW));
+			
+			// reset cache
+			UserEditor::resetCache();
 		}
-		
-		$sql = "DELETE FROM	wcf".WCF_N."_user_to_group_temp
-			WHERE		until < ?";
-		$statement = WCF::getDB()->prepareStatement($sql);
-		$statement->execute(array(TIME_NOW));
-		
-		// reset cache
-		UserEditor::resetCache();
 		
 		EventHandler::getInstance()->fireAction($this, 'executed');
 	}
