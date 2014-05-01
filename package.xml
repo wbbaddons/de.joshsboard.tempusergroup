@@ -5,8 +5,8 @@
 		<packagename language="de"><![CDATA[Temporäre Benutzergruppen]]></packagename>
 		<packagedescription><![CDATA[This plugin allows users temporarily add to groups.]]></packagedescription>
 		<packagedescription language="de"><![CDATA[Dieses Plugin stellt die Möglichkeit bereit Nutzer in temporäre Benutzergruppen zu stecken.]]></packagedescription>
-		<version>1.0.0</version>
-		<date>2013-12-15</date>
+		<version>1.0.1</version>
+		<date>2014-05-01</date>
 		<license><![CDATA[Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/legalcode>]]></license>
 	</packageinformation>
 
@@ -23,6 +23,10 @@
 	    <instruction type="file">files.tar</instruction>
             <instruction type="sql">install.sql</instruction>
 	    <instruction type="cronjob">cronjob.xml</instruction>
+	</instructions>
+
+	<instructions type="update" fromversion="1.0.0">
+	    <instruction type="file">files.tar</instruction>
 	</instructions>
 
 	<instructions type="update" fromversion="1.0.0 Beta 1">
