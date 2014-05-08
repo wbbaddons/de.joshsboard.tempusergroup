@@ -72,7 +72,7 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 			
 			$editor = array(); 
 			
-			foreach ($users as $user) {
+			foreach ($this->user as $user) {
 				$editor[] = new UserEditor($user); 
 			}
 			
