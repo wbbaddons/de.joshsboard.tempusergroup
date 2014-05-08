@@ -52,7 +52,7 @@ class RemoveUserFromGroupCronjob extends AbstractCronjob {
 		
 		if (count($this->userToGroups) != 0) {
 			// remove users from groups
-			$userObjects = User::getUsers(array_keys($this->user));
+			$userObjects = User::getUsers(array_keys($this->userToGroups));
 			foreach ($this->userToGroups as $userID => $groupIDs) {
 				$user = $userObjects[$userID];
 				$editor = new UserEditor($user);
